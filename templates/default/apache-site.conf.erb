@@ -1,0 +1,63 @@
+<% if @params[:ssl] %>
+<VirtualHost <%= node[:ipaddress] %>:443>
+  ServerName <% if node[:magento][:server][:secure_domain] %><%= node[:magento][:server][:secure_domain] %><% else %><%= @params[:server_name] %><% end %>
+
+  SSLEngine on
+  SSLCertificateKeyFile ssl/<%= @params[:server_name] %>.pem
+  SSLCertificateFile ssl/<%= @params[:server_name] %>.pem
+  SSLProtocol all
+  SSLCipherSuite ALL:!ADH:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP:+eNULL
+<% else %>
+<VirtualHost *:80>
+  ServerName <%= @params[:server_name] %>
+  ServerAlias <% @params[:server_aliases].each do |a| %><%= "#{a}" %> <% end %>
+<% end %>
+
+  DocumentRoot <%= @params[:docroot] %>
+
+  <Directory <%= @params[:docroot] %>>
+    AllowOverride All
+    <% if @params[:ssl] %>SSLRequire %{SSL_CIPHER_USEKEYSIZE} >= 128<% end %>
+  </Directory>
+
+  <Directory />
+    Options FollowSymLinks
+    AllowOverride None
+  </Directory>
+
+  LogLevel info
+  ErrorLog <%= node[:apache][:log_dir] %>/<%= @params[:name] %>-error.log
+  CustomLog <%= node[:apache][:log_dir] %>/<%= @params[:name] %>-access.log combined
+
+  RewriteEngine On
+  RewriteLog <%= node[:apache][:log_dir] %>/<%= @application_name %>-rewrite.log
+  RewriteLogLevel 0
+
+  <IfModule mod_deflate.c>
+
+  ############################################
+  ## enable apache served files compression
+  ## http://developer.yahoo.com/performance/rules.html#gzip
+
+    # Insert filter on all content
+    ###SetOutputFilter DEFLATE
+    # Insert filter on selected content types only
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript
+
+    # Netscape 4.x has some problems...
+    BrowserMatch ^Mozilla/4 gzip-only-text/html
+
+    # Netscape 4.06-4.08 have some more problems
+    BrowserMatch ^Mozilla/4\.0[678] no-gzip
+
+    # MSIE masquerades as Netscape, but it is fine
+    BrowserMatch \bMSIE !no-gzip !gzip-only-text/html
+
+    # Don't compress images
+    SetEnvIfNoCase Request_URI \.(?:gif|jpe?g|png)$ no-gzip dont-vary
+
+    # Make sure proxies don't deliver the wrong content
+    Header append Vary User-Agent env=!dont-vary
+
+  </IfModule>
+</VirtualHost>

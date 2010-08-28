@@ -1,0 +1,62 @@
+= DESCRIPTION:
+
+Installs and configures Magento http://www.magentocommerce.com/ ecommerce platform. Also contains recipes to setup apache2 or nginx webserver backend, mysql database and sample data.
+
+= REQUIREMENTS:
+
+== Platform:
+
+Tested with apache backend on Ubuntu 10.04 and Debian 5.0 (Lenny).
+And nginx + php-fpm backend on Debian 5.0 (Lenny) only.
+
+== Cookbooks:
+
+Opscode cookbooks, http://github.com/opscode/cookbooks/tree/master:
+
+* php
+* apache2
+* nginx
+* mysql
+* openssl
+
+For a greather performance consider to give a try the following cookbooks:
+
+* php-fpm, http://github.com/yviktorov/cookbook-php-fpm
+* eaccelerator, http://github.com/yviktorov/cookbook_eaccelerator
+
+Also available thru http://cookbooks.opscode.com/
+
+== Libraries:
+
+The openssl library is required from the openssl cookbook to generate secure passwords.
+
+= ATTRIBUTES:
+
+* magento[:dir] - Set the location to place magento files. Default is /var/www/magento.
+* magento[:db][:database] - Magento will use this MySQL database to store its data.
+* magento[:db][:username] - Magento will connect to MySQL using this user.
+* magento[:db][:password] - Password for the Magento MySQL user. The default is a randomly generated string.
+* magento[:admin][:email] - Email address for the Magento Admin Panel user.
+* magento[:admin][:user] - Username/login for Magento Admin Panel user.
+* magento[:admin][:user] - Passwrod for the Magento Admin Panel user. The default is a randomly generated string.
+
+The random generation is handled with the secure_password method in the openssl cookbook which is a cryptographically secure random generator and not predictable like the random method in the ruby standard library.
+
+= USAGE:
+
+
+= LICENSE and AUTHOR:
+
+Author:: Yevgeniy A. Viktorov (@yviktorov)
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
