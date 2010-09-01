@@ -14,13 +14,6 @@ directory "#{node[:nginx][:dir]}/ssl" do
   action :create
 end
 
-cookbook_file "#{node[:nginx][:dir]}/ssl/#{server_fqdn}.pem" do
-  source "cert.pem"
-  mode 0644
-  owner "root"
-  group "root"
-end
-
 bash "Create SSL Certificates" do
   cwd "#{node[:nginx][:dir]}/ssl"
   code <<-EOH
@@ -30,6 +23,15 @@ bash "Create SSL Certificates" do
   cat #{server_fqdn}.crt #{server_fqdn}.key > #{server_fqdn}.pem
   EOH
   only_if { File.zero?("#{node[:nginx][:dir]}/ssl/#{server_fqdn}.pem") }
+  action :nothing
+end
+
+cookbook_file "#{node[:nginx][:dir]}/ssl/#{server_fqdn}.pem" do
+  source "cert.pem"
+  mode 0644
+  owner "root"
+  group "root"
+  notifies :run, resources(:bash => "Create SSL Certificates"), :immediately
 end
 
 %w{backend}.each do |file|

@@ -6,13 +6,6 @@ else
   server_fqdn = node.fqdn
 end
 
-cookbook_file "#{node[:apache][:dir]}/ssl/#{server_fqdn}.pem" do
-  source "cert.pem"
-  mode 0644
-  owner "root"
-  group "root"
-end
-
 bash "Create SSL Certificates" do
   cwd "#{node[:apache][:dir]}/ssl"
   code <<-EOH
@@ -22,6 +15,15 @@ bash "Create SSL Certificates" do
   cat #{server_fqdn}.crt #{server_fqdn}.key > #{server_fqdn}.pem
   EOH
   only_if { File.zero?("#{node[:apache][:dir]}/ssl/#{server_fqdn}.pem") }
+  action :nothing
+end
+
+cookbook_file "#{node[:apache][:dir]}/ssl/#{server_fqdn}.pem" do
+  source "cert.pem"
+  mode 0644
+  owner "root"
+  group "root"
+  notifies :run, resources(:bash => "Create SSL Certificates"), :immediately
 end
 
 %w{magento magento_ssl}.each do |site|
