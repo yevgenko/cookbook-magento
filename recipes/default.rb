@@ -1,5 +1,3 @@
-include_recipe "mysql::client"
-
 if node.has_key?("ec2")
   server_fqdn = node.ec2.public_hostname
 else
@@ -27,38 +25,40 @@ cookbook_file "/etc/php5/cli/php.ini" do
   group "root"
 end
 
-remote_file "#{Chef::Config[:file_cache_path]}/magento-downloader.tar.gz" do
-  checksum node[:magento][:downloader][:checksum]
-  source node[:magento][:downloader][:url]
-  mode "0644"
-end
+unless File.exists?("#{node[:magento][:dir]}/installed.flag")
 
-directory "#{node[:magento][:dir]}" do
-  owner "root"
-  group "www-data"
-  mode "0755"
-  action :create
-  recursive true
-end
+  remote_file "#{Chef::Config[:file_cache_path]}/magento-downloader.tar.gz" do
+    checksum node[:magento][:downloader][:checksum]
+    source node[:magento][:downloader][:url]
+    mode "0644"
+  end
 
-execute "untar-magento" do
-  cwd node[:magento][:dir]
-  command "tar --strip-components 1 -xzf #{Chef::Config[:file_cache_path]}/magento-downloader.tar.gz"
-end
+  directory "#{node[:magento][:dir]}" do
+    owner "root"
+    group "www-data"
+    mode "0755"
+    action :create
+    recursive true
+  end
 
-execute "pear-setup" do
-  cwd node[:magento][:dir]
-  command "./pear mage-setup ."
-end
+  execute "untar-magento" do
+    cwd node[:magento][:dir]
+    command "tar --strip-components 1 -xzf #{Chef::Config[:file_cache_path]}/magento-downloader.tar.gz"
+  end
 
-execute "magento-install-core" do
-  cwd node[:magento][:dir]
-  command "./pear install magento-core/Mage_All_Latest-#{node[:magento][:version]}"
-end
+  execute "pear-setup" do
+    cwd node[:magento][:dir]
+    command "./pear mage-setup ."
+  end
 
-bash "magento-install-site" do
-  cwd node[:magento][:dir]
-  code <<-EOH
+  execute "magento-install-core" do
+    cwd node[:magento][:dir]
+    command "./pear install magento-core/Mage_All_Latest-#{node[:magento][:version]}"
+  end
+
+  bash "magento-install-site" do
+    cwd node[:magento][:dir]
+    code <<-EOH
 rm -f app/etc/local.xml
 php -f install.php -- \
 --license_agreement_accepted "yes" \
@@ -80,9 +80,11 @@ php -f install.php -- \
 --admin_email "#{admin_email}" \
 --admin_username "#{node[:magento][:admin][:user]}" \
 --admin_password "#{node[:magento][:admin][:password]}"
+touch #{node[:magento][:dir]}/installed.flag
 EOH
+  end
 end
-
+  
 template "#{node[:magento][:dir]}/app/etc/local.xml" do      
   source "local.xml.erb"                                           
   mode "0600"                                                      
