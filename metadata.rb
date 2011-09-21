@@ -1,5 +1,5 @@
 maintainer       "Yevgeniy Viktorov"
-maintainer_email "wik@rentasite.com.ua"
+maintainer_email "yeevgen@gmail.com"
 license          "Apache 2.0"
 description      "Installing magento stack"
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.rdoc'))

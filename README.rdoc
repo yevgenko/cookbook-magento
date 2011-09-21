@@ -47,7 +47,7 @@ The random generation is handled with the secure_password method in the openssl 
 
 = LICENSE and AUTHOR:
 
-Author:: Yevgeniy A. Viktorov (@yviktorov)
+Author:: Yevgeniy A. Viktorov (@yeevgen)
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
