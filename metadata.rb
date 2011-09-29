@@ -1,12 +1,11 @@
 maintainer       "Yevgeniy Viktorov"
 maintainer_email "yeevgen@gmail.com"
 license          "Apache 2.0"
-description      "Installing magento stack"
+description      "Magento app stack"
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.rdoc'))
 version          "0.3.1"
-recipe           "magento", "Install magento"
+recipe           "magento", "Prepare app stack for magento deployments"
 recipe           "magento::mysql", "Create mysql database for magento"
-recipe           "magento::sample_data", "Pre-populate magento with sample data"
 recipe           "magento::apache2", "Install apache2 webserver for magento"
 recipe           "magento::nginx", "Install nginx webserver for magento"
 
@@ -18,25 +17,15 @@ end
   depends cb
 end
 
-attribute "magento/version",
-  :display_name => "Magento download version",
-  :description => "Version of Magento to download from the Magento site.",
-  :default => "stable"
-
-attribute "magento/downloader/url",
-  :display_name => "Magento downloader URL",
-  :description => "URL to magento downloader.",
-  :default => "http://www.magentocommerce.com/downloads/assets/1.3.2.1/magento-downloader-1.3.2.1.tar.gz"
-
-attribute "magento/downloader/checksum",
-  :display_name => "Magento downloader tarball checksum",
-  :description => "Checksum of the tarball for the magento downloader.",
-  :default => "91ccdebf0403f0c328cb728b4cd19504"
-  
 attribute "magento/dir",
   :display_name => "Magento installation directory",
   :description => "Location to place magento files.",
   :default => "/var/www/magento"
+
+attribute "magento/user",
+  :display_name => "Magento server user",
+  :description => "The owner of magento installation directory",
+  :default => "magento"
 
 attribute "magento/server/aliases",
   :display_name => "Magento domain aliases",
