@@ -27,21 +27,6 @@ attribute "magento/user",
   :description => "The owner of magento installation directory",
   :default => "magento"
 
-attribute "magento/server/aliases",
-  :display_name => "Magento domain aliases",
-  :description => "Domain aliases magento can be serverd on",
-  :default => ""
-
-attribute "magento/server/static_domains",
-  :display_name => "Magento static domains",
-  :description => "Domains can be used to server static files",
-  :default => ""
-
-attribute "magento/server/secure_domain",
-  :display_name => "Magento secure domain",
-  :description => "Domain to serve magento over SSL",
-  :default => ""
-
 attribute "magento/db/database",
   :display_name => "Magento MySQL database",
   :description => "Magento will use this MySQL database to store its data.",

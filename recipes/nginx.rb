@@ -43,20 +43,22 @@ end
   end
 end
 
-%w{magento magento_ssl}.each do |site|
+%w{default ssl}.each do |site|
   template "#{node[:nginx][:dir]}/sites-available/#{site}" do
     source "nginx-site.erb"
     owner "root"
     group "root"
     mode 0644
-    variables(:server_fqdn => server_fqdn, :ssl => (site == "magento_ssl")?true:false)
+    variables(
+      :path => "#{node[:magento][:dir]}",
+      :ssl => (site == "ssl")?true:false)
   end
   nginx_site "#{site}" do
-    notifies :restart, resources(:service => "nginx")
+    notifies :reload, resources(:service => "nginx")
   end
 end
 
 execute "ensure correct permissions" do
-  command "chown -R root:#{node[:nginx][:user]} #{node[:magento][:dir]} && chmod -R g+rw #{node[:magento][:dir]}"
+  command "chown -R #{node[:magento][:user]}:#{node[:nginx][:user]} #{node[:magento][:dir]} && chmod -R g+rw #{node[:magento][:dir]}"
   action :run
 end
