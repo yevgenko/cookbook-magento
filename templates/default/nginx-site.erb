@@ -12,44 +12,44 @@ server {
   root <%= node[:magento][:dir] %>;
   autoindex off;
 
-  # protection (we have no .htaccess)                                                            
+  # protection (we have no .htaccess)
   location ~ (^/(app/|includes/|lib/|/pkginfo/|var/|report/config.xml)|/\.svn/|/.hta.+) {
-      deny all;                                                                                  
-  }                                                                                              
-                                                                                                 
-  # handle all .php files, /downloader and /report                                               
-  location ~ (\.php|/downloader/?|/report/?)$ {                                                  
-      if ($request_uri ~ /(downloader|report)$){ # no trailing /, redirecting                    
-          rewrite  ^(.*)$ $1/ permanent;                                                         
-      }                                                                                          
-      fastcgi_index index.php;                                                                   
-      include /etc/nginx/fastcgi_params;                                                         
+      deny all;
+  }
+
+  # handle all .php files, /downloader and /report
+  location ~ (\.php|/downloader/?|/report/?)$ {
+      if ($request_uri ~ /(downloader|report)$){ # no trailing /, redirecting
+          rewrite  ^(.*)$ $1/ permanent;
+      }
+      fastcgi_index index.php;
+      include /etc/nginx/fastcgi_params;
       fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
       <% if @ssl %>fastcgi_param HTTPS on;<% end %>
-      if (-e $request_filename) { # check if requested path exists                               
-          fastcgi_pass backend;                                                                  
-      }                                                                                          
-                                                                                                 
-  }                                                                                              
-                                                                                                 
-  # handle magento                                                                               
-  location /                                               
-  {                                                                                              
-      # set expire headers                                                                       
-      if ($request_uri ~* "\.(ico|css|js|gif|jpe?g|png)$") {                                     
-          expires max;                                                                           
-      }                                                                                          
-      # set fastcgi settings, not allowed in the "if" block                                      
-      include /etc/nginx/fastcgi_params;                                                         
-      fastcgi_param SCRIPT_FILENAME $document_root/index.php;                            
+      if (-e $request_filename) { # check if requested path exists
+          fastcgi_pass backend;
+      }
+
+  }
+
+  # handle magento
+  location /
+  {
+      # set expire headers
+      if ($request_uri ~* "\.(ico|css|js|gif|jpe?g|png)$") {
+          expires max;
+      }
+      # set fastcgi settings, not allowed in the "if" block
+      include /etc/nginx/fastcgi_params;
+      fastcgi_param SCRIPT_FILENAME $document_root/index.php;
       fastcgi_param SCRIPT_NAME /index.php;
       <% if @ssl %>fastcgi_param HTTPS on;<% end %>
-      # rewrite - if file not found, pass it to the backend                                      
-      if (!-f $request_filename) {                                                               
-          fastcgi_pass backend;                                                                  
-          break;                                                                                 
-      }                                                                                          
-  }                                                                                              
+      # rewrite - if file not found, pass it to the backend
+      if (!-f $request_filename) {
+          fastcgi_pass backend;
+          break;
+      }
+  }
 }
 
 <% if node[:magento][:server][:static_domains] && !@ssl %>
