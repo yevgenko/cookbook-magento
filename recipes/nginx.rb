@@ -1,3 +1,4 @@
+include_recipe "php-fpm"
 include_recipe "magento"
 include_recipe "nginx"
 
@@ -18,15 +19,15 @@ bash "Create SSL Certificates" do
   cwd "#{node[:nginx][:dir]}/ssl"
   code <<-EOH
   umask 022
-  openssl genrsa 2048 > #{server_fqdn}.key
-  openssl req -batch -new -x509 -days 365 -key #{server_fqdn}.key -out #{server_fqdn}.crt
-  cat #{server_fqdn}.crt #{server_fqdn}.key > #{server_fqdn}.pem
+  openssl genrsa 2048 > magento.key
+  openssl req -batch -new -x509 -days 365 -key magento.key -out magento.crt
+  cat magento.crt magento.key > magento.pem
   EOH
-  only_if { File.zero?("#{node[:nginx][:dir]}/ssl/#{server_fqdn}.pem") }
+  only_if { File.zero?("#{node[:nginx][:dir]}/ssl/magento.pem") }
   action :nothing
 end
 
-cookbook_file "#{node[:nginx][:dir]}/ssl/#{server_fqdn}.pem" do
+cookbook_file "#{node[:nginx][:dir]}/ssl/magento.pem" do
   source "cert.pem"
   mode 0644
   owner "root"
@@ -51,7 +52,8 @@ end
     mode 0644
     variables(
       :path => "#{node[:magento][:dir]}",
-      :ssl => (site == "ssl")?true:false)
+      :ssl => (site == "ssl")?true:false
+    )
   end
   nginx_site "#{site}" do
     notifies :reload, resources(:service => "nginx")
