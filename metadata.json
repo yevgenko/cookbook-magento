@@ -28,6 +28,9 @@
     ],
     "php": [
 
+    ],
+    "php-fpm": [
+
     ]
   },
   "recommendations": {

@@ -13,7 +13,7 @@ recipe           "magento::nginx", "Install nginx webserver for magento"
   supports os
 end
 
-%w{ apache2 nginx mysql openssl php }.each do |cb|
+%w{ apache2 nginx mysql openssl php php-fpm }.each do |cb|
   depends cb
 end
 
