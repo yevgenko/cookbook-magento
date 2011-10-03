@@ -1,8 +1,8 @@
 include_recipe "mysql::server"
 
-require 'rubygems'
-Gem.clear_paths
-require 'mysql'
+gem_package "mysql" do
+  action :install
+end
 
 execute "mysql-install-mage-privileges" do
   command "/usr/bin/mysql -u root -p#{node[:mysql][:server_root_password]} < /etc/mysql/mage-grants.sql"
@@ -22,6 +22,7 @@ end
 execute "create #{node[:magento][:db][:database]} database" do
   command "/usr/bin/mysqladmin -u root -p#{node[:mysql][:server_root_password]} create #{node[:magento][:db][:database]}"
   not_if do
+    require 'mysql'
     m = Mysql.new("localhost", "root", node[:mysql][:server_root_password])
     m.list_dbs.include?(node[:magento][:db][:database])
   end
