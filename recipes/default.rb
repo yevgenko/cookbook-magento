@@ -26,8 +26,13 @@ cookbook_file "/etc/php5/cli/php.ini" do
 end
 
 unless File.exists?("#{node[:magento][:dir]}/installed.flag")
-  directory "#{node[:magento][:dir]}" do
-    owner "root"
+  user "#{node[:magento][:user]}" do
+    comment "magento guy"
+    home "#{node[:magento][:dir]}"
+    system true
+  end
+  directory "#{node[:magento][:dir]}/app/etc" do
+    owner "#{node[:magento][:user]}"
     group "www-data"
     mode "0755"
     action :create
@@ -38,7 +43,7 @@ end
 template "#{node[:magento][:dir]}/app/etc/local.xml" do
   source "local.xml.erb"
   mode "0600"
-  owner "root"
-  group "root"
+  owner "#{node[:magento][:user]}"
+  group "www-data"
   variables(:database => node[:magento][:db])
 end
