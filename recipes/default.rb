@@ -17,12 +17,13 @@ end
   end
 end
 
-# Mostly to extend memory_limit which 32Mb on Debian
-cookbook_file "/etc/php5/cli/php.ini" do
-  source "cli-php.ini"
-  mode 0644
-  owner "root"
-  group "root"
+bash "Tweak php.ini file" do
+  cwd "/etc/php5/cli"
+  code <<-EOH
+  sed -i 's/memory_limit = .*/memory_limit = 128M/' php.ini
+  sed -i 's/;realpath_cache_size = .*/realpath_cache_size = 32K/' php.ini
+  sed -i 's/;realpath_cache_ttl = .*/realpath_cache_ttl = 7200/' php.ini
+  EOH
 end
 
 unless File.exists?("#{node[:magento][:dir]}/installed.flag")
