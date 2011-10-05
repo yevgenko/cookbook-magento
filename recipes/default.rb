@@ -17,7 +17,7 @@ end
   end
 end
 
-bash "Tweak php.ini file" do
+bash "Tweak CLI php.ini file" do
   cwd "/etc/php5/cli"
   code <<-EOH
   sed -i 's/memory_limit = .*/memory_limit = 128M/' php.ini

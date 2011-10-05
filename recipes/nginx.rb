@@ -8,6 +8,15 @@ else
   server_fqdn = node.fqdn
 end
 
+bash "Tweak FPM php.ini file" do
+  cwd "/etc/php5/fpm"
+  code <<-EOH
+  sed -i 's/memory_limit = .*/memory_limit = 128M/' php.ini
+  sed -i 's/;realpath_cache_size = .*/realpath_cache_size = 32K/' php.ini
+  sed -i 's/;realpath_cache_ttl = .*/realpath_cache_ttl = 7200/' php.ini
+  EOH
+end
+
 directory "#{node[:nginx][:dir]}/ssl" do
   owner "root"
   group "root"
