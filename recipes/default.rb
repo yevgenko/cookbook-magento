@@ -29,7 +29,7 @@ end
 bash "Tweak apc.ini file" do
   cwd "/etc/php5/conf.d"
   code <<-EOH
-  grep -q -e 'apc.stat = 0' apc.ini || echo "apc.stat = 0" >> apc.ini
+  grep -q -e 'apc.stat=0' apc.ini || echo "apc.stat=0" >> apc.ini
   EOH
 end
 
