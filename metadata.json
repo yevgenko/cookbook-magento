@@ -6,32 +6,16 @@
   "maintainer_email": "yeevgen@gmail.com",
   "license": "Apache 2.0",
   "platforms": {
-    "debian": [
-
-    ],
-    "ubuntu": [
-
-    ]
+    "debian": ">= 0.0.0",
+    "ubuntu": ">= 0.0.0"
   },
   "dependencies": {
-    "apache2": [
-
-    ],
-    "nginx": [
-
-    ],
-    "mysql": [
-
-    ],
-    "openssl": [
-
-    ],
-    "php": [
-
-    ],
-    "php-fpm": [
-
-    ]
+    "apache2": ">= 0.0.0",
+    "nginx": ">= 0.0.0",
+    "mysql": ">= 0.0.0",
+    "openssl": ">= 0.0.0",
+    "php": ">= 0.0.0",
+    "php-fpm": ">= 0.0.0"
   },
   "recommendations": {
   },
@@ -48,6 +32,34 @@
       "display_name": "Magento installation directory",
       "description": "Location to place magento files.",
       "default": "/var/www/magento",
+      "choice": [
+
+      ],
+      "calculated": false,
+      "type": "string",
+      "required": "optional",
+      "recipes": [
+
+      ]
+    },
+    "magento/run_type": {
+      "display_name": "MAGE_RUN_TYPE",
+      "description": "",
+      "default": "store",
+      "choice": [
+
+      ],
+      "calculated": false,
+      "type": "string",
+      "required": "optional",
+      "recipes": [
+
+      ]
+    },
+    "magento/run_codes": {
+      "display_name": "MAGE_RUN_CODE",
+      "description": "Domain based run codes",
+      "default": "",
       "choice": [
 
       ],

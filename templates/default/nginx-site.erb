@@ -1,3 +1,8 @@
+map $http_host $magesite {
+
+<% node[:magento][:run_codes].each do |domain, code| %><%= "#{domain} #{code};\n" %><% end %>
+}
+
 server {
 <% if @ssl %>
   listen 443;
@@ -26,6 +31,8 @@ server {
     }
     fastcgi_index index.php;
     include /etc/nginx/fastcgi_params;
+    fastcgi_param MAGE_RUN_TYPE <%= node[:magento][:run_type] %>;
+    fastcgi_param MAGE_RUN_CODE $magesite;
     fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
     <% if @ssl %>fastcgi_param HTTPS on;<% end %>
     if (-e $request_filename) { # check if requested path exists
@@ -41,6 +48,8 @@ server {
     }
     # set fastcgi settings, not allowed in the "if" block
     include /etc/nginx/fastcgi_params;
+    fastcgi_param MAGE_RUN_TYPE <%= node[:magento][:run_type] %>;
+    fastcgi_param MAGE_RUN_CODE $magesite;
     fastcgi_param SCRIPT_FILENAME $document_root/index.php;
     fastcgi_param SCRIPT_NAME /index.php;
     <% if @ssl %>fastcgi_param HTTPS on;<% end %>

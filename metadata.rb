@@ -22,6 +22,16 @@ attribute "magento/dir",
   :description => "Location to place magento files.",
   :default => "/var/www/magento"
 
+attribute "magento/run_type",
+  :display_name => "MAGE_RUN_TYPE",
+  :description => "",
+  :default => "store"
+
+attribute "magento/run_codes",
+  :display_name => "MAGE_RUN_CODE",
+  :description => "Domain based run codes",
+  :default => ""
+
 attribute "magento/user",
   :display_name => "Magento server user",
   :description => "The owner of magento installation directory",
