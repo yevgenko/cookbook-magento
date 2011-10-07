@@ -69,7 +69,7 @@ end
   end
 end
 
-execute "ensure correct permissions" do
-  command "chown -R #{node[:magento][:user]}:#{node[:nginx][:user]} #{node[:magento][:dir]} && chmod -R g+rw #{node[:magento][:dir]}/*"
+execute "ensure correct ownership" do
+  command "chown -R #{node[:magento][:user]}:#{node[:nginx][:user]} #{node[:magento][:dir]}"
   action :run
 end
