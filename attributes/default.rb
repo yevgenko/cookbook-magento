@@ -1,6 +1,7 @@
 # General settings
 default[:magento][:version] = "stable"
 default[:magento][:dir] = "/var/www/magento"
+default[:magento][:gen_cfg] = true
 default[:magento][:run_type] = "store"
 default[:magento][:run_codes] = Array.new
 default[:magento][:user] = "magento"

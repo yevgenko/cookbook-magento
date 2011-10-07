@@ -22,6 +22,11 @@ attribute "magento/dir",
   :description => "Location to place magento files.",
   :default => "/var/www/magento"
 
+attribute "magento/gen_cfg",
+  :display_name => "Magento local.xml generator",
+  :description => "The weather the chef should generate local.xml file or leave it to someone also.",
+  :default => "true"
+
 attribute "magento/run_type",
   :display_name => "MAGE_RUN_TYPE",
   :description => "",

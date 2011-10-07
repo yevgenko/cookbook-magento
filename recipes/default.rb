@@ -33,12 +33,21 @@ bash "Tweak apc.ini file" do
   EOH
 end
 
-unless File.exists?("#{node[:magento][:dir]}/installed.flag")
-  user "#{node[:magento][:user]}" do
-    comment "magento guy"
-    home "#{node[:magento][:dir]}"
-    system true
-  end
+user "#{node[:magento][:user]}" do
+  comment "magento guy"
+  home "#{node[:magento][:dir]}"
+  system true
+end
+
+directory "#{node[:magento][:dir]}" do
+  owner "#{node[:magento][:user]}"
+  group "www-data"
+  mode "0755"
+  action :create
+  recursive true
+end
+
+if node[:magento][:gen_cfg]
   directory "#{node[:magento][:dir]}/app/etc" do
     owner "#{node[:magento][:user]}"
     group "www-data"
@@ -46,12 +55,11 @@ unless File.exists?("#{node[:magento][:dir]}/installed.flag")
     action :create
     recursive true
   end
-end
-
-template "#{node[:magento][:dir]}/app/etc/local.xml" do
-  source "local.xml.erb"
-  mode "0600"
-  owner "#{node[:magento][:user]}"
-  group "www-data"
-  variables(:database => node[:magento][:db])
+  template "#{node[:magento][:dir]}/app/etc/local.xml" do
+    source "local.xml.erb"
+    mode "0600"
+    owner "#{node[:magento][:user]}"
+    group "www-data"
+    variables(:database => node[:magento][:db])
+  end
 end
