@@ -21,8 +21,8 @@ Opscode cookbooks, http://github.com/opscode/cookbooks/tree/master:
 
 For a greather performance consider to give a try the following cookbooks:
 
-* php-fpm, http://github.com/yviktorov/cookbook-php-fpm
-* eaccelerator, http://github.com/yviktorov/cookbook_eaccelerator
+* php-fpm, http://github.com/yevgenko/cookbook-php-fpm
+* eaccelerator, http://github.com/yevgenko/cookbook_eaccelerator
 
 Also available thru http://cookbooks.opscode.com/
 
@@ -47,7 +47,7 @@ The random generation is handled with the secure_password method in the openssl 
 
 = LICENSE and AUTHOR:
 
-Author:: Yevgeniy A. Viktorov (@yeevgen)
+Author:: Yevgeniy A. Viktorov (@yevgenko)
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
