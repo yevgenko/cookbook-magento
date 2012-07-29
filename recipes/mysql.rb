@@ -1,5 +1,10 @@
 include_recipe "mysql::server"
 
+# necessary for mysql gem installation
+package "make" do
+  action :upgrade
+end
+
 gem_package "mysql" do
   action :install
 end
@@ -22,6 +27,8 @@ end
 execute "create #{node[:magento][:db][:database]} database" do
   command "/usr/bin/mysqladmin -u root -p#{node[:mysql][:server_root_password]} create #{node[:magento][:db][:database]}"
   not_if do
+    require 'rubygems'
+    Gem.clear_paths
     require 'mysql'
     m = Mysql.new("localhost", "root", node[:mysql][:server_root_password])
     m.list_dbs.include?(node[:magento][:db][:database])
