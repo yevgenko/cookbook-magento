@@ -1,5 +1,5 @@
-include_recipe "magento"
 include_recipe "php-fpm"
+include_recipe "magento"
 include_recipe "nginx"
 
 if node.has_key?("ec2")
@@ -15,7 +15,6 @@ bash "Tweak FPM php.ini file" do
   sed -i 's/;realpath_cache_size = .*/realpath_cache_size = 32K/' php.ini
   sed -i 's/;realpath_cache_ttl = .*/realpath_cache_ttl = 7200/' php.ini
   EOH
-  notifies :restart, resources(:service => "php5-fpm")
 end
 
 directory "#{node[:nginx][:dir]}/ssl" do
