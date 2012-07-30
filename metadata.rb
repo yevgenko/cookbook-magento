@@ -8,6 +8,7 @@ recipe           "magento", "Prepare app stack for magento deployments"
 recipe           "magento::mysql", "Create mysql database for magento"
 recipe           "magento::apache2", "Install apache2 webserver for magento"
 recipe           "magento::nginx", "Install nginx webserver for magento"
+recipe           "magento::sample", "Deploy magento sample site"
 
 %w{ debian ubuntu }.each do |os|
   supports os
