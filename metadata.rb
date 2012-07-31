@@ -2,7 +2,7 @@ maintainer       "Yevgeniy Viktorov"
 maintainer_email "craftsman@yevgenko.me"
 license          "Apache 2.0"
 description      "Magento app stack"
-long_description IO.read(File.join(File.dirname(__FILE__), 'README.rdoc'))
+long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
 version          "0.3.1"
 recipe           "magento", "Prepare app stack for magento deployments"
 recipe           "magento::mysql", "Create mysql database for magento"
