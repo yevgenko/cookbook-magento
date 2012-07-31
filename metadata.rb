@@ -3,7 +3,7 @@ maintainer_email "craftsman@yevgenko.me"
 license          "Apache 2.0"
 description      "Magento app stack"
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version          "0.3.1"
+version          "0.4.0"
 recipe           "magento", "Prepare app stack for magento deployments"
 recipe           "magento::mysql", "Create mysql database for magento"
 recipe           "magento::apache2", "Install apache2 webserver for magento"
