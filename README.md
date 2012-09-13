@@ -12,7 +12,7 @@ Run the following commands with-in your [Chef Repository][]:
 
 ## Usage
 
-NOTE: currently here is no recipes to deploy magento itself except
+NOTE: currently here is no recipes to deploy actual magento code except
 `[magento::sample]`, so, I encourage everyone to contribute deployment
 workflows :)
 
