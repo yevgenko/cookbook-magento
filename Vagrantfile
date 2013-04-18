@@ -73,7 +73,16 @@ Vagrant::Config.run do |config|
     # chef.add_role "web"
 
     # You may also specify custom JSON attributes:
-    chef.json = { "mysql" => { "bind_address" => "127.0.0.1", "server_root_password" => "toor" }, "magento" => { "url" => "http://localhost:8080/" } }
+    chef.json = {
+      "mysql" => {
+        "bind_address" => "127.0.0.1",
+        "server_root_password"   => "toor",
+        "server_repl_password"   => "toor",
+        "server_debian_password" => "toor"
+      },
+      "magento" => { "url" => "http://localhost:8080/" }
+    }
+
   end
 
   # Enable provisioning with chef server, specifying the chef server URL,
