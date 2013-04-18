@@ -3,7 +3,7 @@ maintainer_email "craftsman@yevgenko.me"
 license          "Apache 2.0"
 description      "Magento app stack"
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version          "0.4.0"
+version          "0.5.0"
 recipe           "magento", "Prepare app stack for magento deployments"
 recipe           "magento::mysql", "Create mysql database for magento"
 recipe           "magento::apache2", "Install apache2 webserver for magento"
@@ -14,9 +14,11 @@ recipe           "magento::sample", "Deploy magento sample site"
   supports os
 end
 
-%w{ apache2 nginx mysql openssl php php-fpm }.each do |cb|
+%w{ apache2 nginx mysql openssl php }.each do |cb|
   depends cb
 end
+
+depends "php-fpm", ">= 0.4.1"
 
 attribute "magento/dir",
   :display_name => "Magento installation directory",
@@ -72,3 +74,8 @@ attribute "magento/admin/password",
   :display_name => "Magento Admin password",
   :description => "Password for the Magento Administration.",
   :default => "randomly generated"
+
+attribute "magento/nginx/fastcgi_process",
+  :display_name => "FastCGI Process",
+  :description => "FastCGI Process, i.e. one of php-fpm pools, see php-fpm cookbook for details.",
+  :default => "unix:/var/run/php-fpm-www.sock"

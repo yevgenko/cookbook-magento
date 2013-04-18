@@ -11,6 +11,9 @@ default[:magento][:db][:username] = "magentouser"
 default[:magento][:admin][:email] = "webmaster@localhost"
 default[:magento][:admin][:user] = "admin"
 
+# Default FastCGI Process
+default[:magento][:nginx][:fastcgi_process] = "unix:/var/run/php-fpm-www.sock"
+
 ::Chef::Node.send(:include, Opscode::OpenSSL::Password)
 
 set_unless[:magento][:db][:password] = secure_password
