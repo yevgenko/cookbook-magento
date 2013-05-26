@@ -1,3 +1,4 @@
+name             "magento"
 maintainer       "Yevgeniy Viktorov"
 maintainer_email "craftsman@yevgenko.me"
 license          "Apache 2.0"
