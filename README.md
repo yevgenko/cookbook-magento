@@ -5,67 +5,52 @@ Collection of recipes to build app stack for the [Magento][] deployments with
 
 ## Installation
 
+### With Chef Repository
+
 Run the following commands with-in your [Chef Repository][]:
 
     knife cookbook site install magento
     knife cookbook upload magento
 
+### With Berkshelf
+
+    echo 'magento ~> 0.7' > Berksfile
+    berks install
+
 ## Usage
 
-NOTE: currently here is no recipes to deploy actual magento code except
-`[magento::sample]`, so, I encourage everyone to contribute deployment
-workflows :)
+### Standalone Node
 
-1. first of all checkout the recipes available, see `metadata.rb`
-2. decide the prefered frontend, i.e. nginx, apache, etc.
-3. decide if you will put database and frontend on a single or different nodes
-4. include the recipes where you want the app stack and database configured
+Bootstrap [Rackspace Cloud Servers][] instance with:
 
-For example, you could start with the following [Chef Roles][]:
+    knife rackspace server create 'recipe[magento]' --server-name magebox --image 49 --flavor 3
 
-    # roles/app.rb
-    name "app"
-    run_list "recipe[magento::nginx]"
+Navigate to the node URL or IP in your browser to complete [Magento][] setup.
 
-    # roles/db.rb
-    name "db"
-    run_list "recipe[magento::mysql]"
-    default_attributes "mysql" => {
-    "bind_address" => "127.0.0.1",
-    "tunable" => {
-        "innodb_buffer_pool_size" => "1GB",
-        "table_cache" => "1024",
-        "query_cache_size" => "64M",
-        "query_cache_limit" => "2M"
-    }
-    }
+Default Mysql Credentials:
 
-And then bootstrap [Rackspace Cloud Servers][] instance with:
-
-    knife rackspace server create 'role[app],role[db]' --server-name magebox --image 49 --flavor 3
-
-Or if you like to deploy sample site:
-
-    knife rackspace server create 'recipe[magento::sample]' --server-name magebox --image 49 --flavor 3
+ * database: magento
+ * user: magentouser
+ * password: randombly generated, see under the node attributes under opscode
+   dashboard
 
 See [Launch Cloud Instances with Knife][] for the reference.
 
 ## Hacking
 
-The project commes with a helper tasks for bootstraping recipes in a sandbox
-environment:
+The project preconfigured with a helper tools for bootstraping cookbook in a
+sandboxed environment, i.e. [VirtualBox][]
 
-    bundle install
-    bundle exec rake sandbox:init
-    bundle exec rake sandbox:up
+### Requirements
 
-See complete list of the tasks available with:
+ * [Bundler][]: `gem install bundler`
+ * [Berkshelf][]: `bundle install`
+ * [Vagrant][] 1.1.0 and greater
+ * Berkshelf plugin for Vagrant: `vagrant plugin install vagrant-berkshelf`
 
-    bundle exec rake -T
+### Sandboxing with VirtualBox
 
-NOTE: The sandbox environment depends on [VirtualBox][] thru the [Vagrant][]
-project. Please check [Vagrant][] manual and make sure you've correct version of
-[VirtualBox][] installed.
+    vagrant up
 
 ## Contributing
 
@@ -84,3 +69,4 @@ project. Please check [Vagrant][] manual and make sure you've correct version of
 [Launch Cloud Instances with Knife]:http://wiki.opscode.com/display/chef/Launch+Cloud+Instances+with+Knife
 [VirtualBox]:https://www.virtualbox.org/
 [Vagrant]:http://vagrantup.com/
+[Berkshelf]:http://berkshelf.com/
