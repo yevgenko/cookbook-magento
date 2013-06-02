@@ -5,6 +5,12 @@ Collection of recipes to build app stack for the [Magento][] deployments with
 
 ## Installation
 
+### With Berkshelf
+
+    echo "cookbook 'magento', '~> 0.6'" >> Berksfile
+    berks install
+    berks upload # if using with Chef Server
+
 ### With Chef Repository
 
 Run the following commands with-in your [Chef Repository][]:
@@ -12,27 +18,22 @@ Run the following commands with-in your [Chef Repository][]:
     knife cookbook site install magento
     knife cookbook upload magento
 
-### With Berkshelf
+## Usage Examples
 
-    echo "cookbook 'nginx', '~> 0.6'" >> Berksfile
-    berks install
-
-## Usage
-
-### Standalone Node
+### Single Rackspace Cloud Server Instance
 
 Bootstrap [Rackspace Cloud Servers][] instance with:
 
-    knife rackspace server create 'recipe[magento]' --server-name magebox --image 49 --flavor 3
+    knife rackspace server create --run-list 'recipe[magento]' --server-name magebox --image 125 --flavor 3
 
-Navigate to the node URL or IP in your browser to complete [Magento][] setup.
+Navigate to the node URL or IP in your browser to complete [Magento][] installation.
+NOTE: you might need to skip base url validation.
 
 Default Mysql Credentials:
 
  * database: magento
  * user: magentouser
- * password: randombly generated, see under the node attributes under opscode
-   dashboard
+ * password: randombly generated, see magento -> db attributes under Chef Server dashboard
 
 See [Launch Cloud Instances with Knife][] for the reference.
 
@@ -48,9 +49,16 @@ sandboxed environment, i.e. [VirtualBox][]
  * [Vagrant][] 1.1.0 and greater
  * Berkshelf plugin for Vagrant: `vagrant plugin install vagrant-berkshelf`
 
-### Sandboxing with VirtualBox
+### Bootstrap VirtualBox
+
+#### With Ubuntu precise 64
 
     vagrant up
+
+#### With CentOS 6.3 x86_64-minimal
+
+    VMBOX='centos63' vagrant up
+
 
 ## Contributing
 
