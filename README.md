@@ -14,7 +14,7 @@ Run the following commands with-in your [Chef Repository][]:
 
 ### With Berkshelf
 
-    echo 'magento ~> 0.7' > Berksfile
+    echo "cookbook 'nginx', '~> 0.6'" > Berksfile
     berks install
 
 ## Usage
