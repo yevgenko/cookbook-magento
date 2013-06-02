@@ -17,6 +17,7 @@ unless File.exist?("#{node[:magento][:dir]}/.installed")
     server_fqdn = node.fqdn
   end
 
+  enc_key = nil # magento encryption key
   machine = node['kernel']['machine'] =~ /x86_64/ ? 'x86_64' : 'i686'
   webserver = node[:magento][:webserver]
   user = 'magento'
@@ -108,7 +109,7 @@ unless File.exist?("#{node[:magento][:dir]}/.installed")
     db_config = { :host => 'localhost' }
     db_user = node[:magento][:db]
   # else
-    # FIXME: data bags search throwing 404 error
+    # FIXME: data bags search throwing 404 error: Net::HTTPServerException
     # db_config = search(:db_config, "id:master").first || { :host => 'localhost' }
     # db_user = search(:db_users, "id:magento").first || node[:magento][:db]
     # enc_key = search(:magento, "id:enckey").first
