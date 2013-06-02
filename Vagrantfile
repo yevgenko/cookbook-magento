@@ -78,11 +78,17 @@ Vagrant.configure("2") do |config|
         :server_root_password => 'rootpass',
         :server_debian_password => 'debpass',
         :server_repl_password => 'replpass'
+      },
+      :magento => {
+        :db => {
+          :password => 'magepass'
+        },
+        :sample_data_url => 'http://www.magentocommerce.com/downloads/assets/1.6.1.0/magento-sample-data-1.6.1.0.tar.gz'
       }
     }
 
     chef.run_list = [
-        "recipe[magento::sample]"
+        "recipe[magento]"
     ]
   end
 end
