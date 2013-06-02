@@ -1,5 +1,8 @@
-GRANT ALL ON <%= @database[:database] %>.* TO '<%= @database[:username] %>'@'%' IDENTIFIED BY '<%= @database[:password] %>';
+DELETE FROM mysql.user WHERE User='';
+DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1');
+DROP DATABASE test;
+DELETE FROM mysql.db WHERE Db='test' OR Db='test\\_%';
 
-SET PASSWORD FOR 'root'@'localhost' = PASSWORD('<%= node[:mysql][:server_root_password] %>');
+GRANT ALL PRIVILEGES ON <%= @database[:database] %>.* TO '<%= @database[:username] %>'@'localhost' IDENTIFIED BY '<%= @database[:password] %>';
 
 FLUSH PRIVILEGES;
