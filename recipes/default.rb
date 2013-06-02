@@ -104,14 +104,15 @@ unless File.exist?("#{node[:magento][:dir]}/.installed")
   end
 
   # Setup Database
-  if Chef::Config[:solo]
+  # if Chef::Config[:solo]
     db_config = { :host => 'localhost' }
     db_user = node[:magento][:db]
-  else
-    db_config = search(:db_config, "id:master").first || { :host => 'localhost' }
-    db_user = search(:db_users, "id:magento").first || node[:magento][:db]
-    enc_key = search(:magento, "id:enckey").first
-  end
+  # else
+    # FIXME: data bags search throwing 404 error
+    # db_config = search(:db_config, "id:master").first || { :host => 'localhost' }
+    # db_user = search(:db_users, "id:magento").first || node[:magento][:db]
+    # enc_key = search(:magento, "id:enckey").first
+  # end
 
   if 'localhost' == db_config[:host]
     magento_database
