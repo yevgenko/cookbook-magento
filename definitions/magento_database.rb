@@ -6,6 +6,14 @@ define :magento_database do
   package "make" do
     action :upgrade
   end
+  
+  package "libmysql-ruby" do
+    action :install
+  end
+
+  package "libmysqlclient-dev" do
+    action :install
+  end
 
   gem_package "mysql" do
     action :install
