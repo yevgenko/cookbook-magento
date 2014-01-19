@@ -24,3 +24,6 @@ suites:
         server_debian_password: test
         server_root_password: test
         server_repl_password: test
+      magento:
+        db:
+          password: magento
