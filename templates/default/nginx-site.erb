@@ -36,7 +36,7 @@ server {
     fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
     <% if @ssl %>fastcgi_param HTTPS on;<% end %>
     if (-e $request_filename) { # check if requested path exists
-      fastcgi_pass <%= node['php-fpm']['pools'].any?{|pool| pool.name == "magento" ? pool.listen} %>;
+      fastcgi_pass <%= node['php-fpm']['pools'].detect{|pool| pool[:name] == "magento"}[:listen] %>;
     }
   }
 
@@ -55,7 +55,7 @@ server {
     <% if @ssl %>fastcgi_param HTTPS on;<% end %>
     # rewrite - if file not found, pass it to the backend
     if (!-f $request_filename) {
-      fastcgi_pass <%= node['php-fpm']['pools'].any?{|pool| pool.name == "magento" ? pool.listen} %>
+      fastcgi_pass <%= node['php-fpm']['pools'].detect{|pool| pool[:name] == "magento"}[:listen] %>;
       break;
     }
   }
