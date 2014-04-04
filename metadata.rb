@@ -15,4 +15,4 @@ end
   depends cb
 end
 
-depends "php-fpm", ">= 0.4.1"
+depends "php-fpm", ">= 0.6.4"
