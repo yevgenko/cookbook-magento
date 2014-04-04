@@ -1,5 +1,5 @@
 # General settings
-default[:magento][:url] = "http://www.magentocommerce.com/downloads/assets/1.7.0.2/magento-1.7.0.2.tar.gz"
+default[:magento][:url] = "http://www.magentocommerce.com/downloads/assets/1.8.1.0/magento-1.8.1.0.tar.gz"
 default[:magento][:dir] = "/var/www/magento"
 default[:magento][:sample_data_url] = '' # http://www.magentocommerce.com/downloads/assets/1.6.1.0/magento-sample-data-1.6.1.0.tar.gz
 default[:magento][:run_type] = "store"
