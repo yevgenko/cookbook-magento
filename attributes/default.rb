@@ -17,18 +17,22 @@ end
 # Web Server
 default[:magento][:webserver] = 'nginx'
 
-set['php-fpm']['pools'] = ["magento"]
+default['php-fpm']['pools'] = [
 
-set_unless['php-fpm']['pool']['magento']['listen'] = "127.0.0.1:9001"
-set_unless['php-fpm']['pool']['magento']['allowed_clients'] = ["127.0.0.1"]
-set_unless['php-fpm']['pool']['magento']['user'] = 'magento'
-set_unless['php-fpm']['pool']['magento']['group'] = 'magento'
-set_unless['php-fpm']['pool']['magento']['process_manager'] = "dynamic"
-set_unless['php-fpm']['pool']['magento']['max_children'] = 50
-set_unless['php-fpm']['pool']['magento']['start_servers'] = 5
-set_unless['php-fpm']['pool']['magento']['min_spare_servers'] = 5
-set_unless['php-fpm']['pool']['magento']['max_spare_servers'] = 35
-set_unless['php-fpm']['pool']['magento']['max_requests'] = 500
+  {
+    :name => "magento",
+    :listen => "127.0.0.1:9001",
+    :allowed_clients => ["127.0.0.1"],
+    :user => 'magento',
+    :group => 'magento',
+    :process_manager => "dynamic",
+    :max_children => 50,
+    :start_servers => 5,
+    :min_spare_servers => 5,
+    :max_spare_servers => 35,
+    :max_requests => 500,
+  }
+]
 
 # Credentials
 ::Chef::Node.send(:include, Opscode::OpenSSL::Password)
