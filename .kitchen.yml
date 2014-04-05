@@ -1,0 +1,29 @@
+---
+driver:
+  name: vagrant
+
+provisioner:
+  name: chef_solo
+
+platforms:
+  - name: ubuntu-12.04
+    driver_config:
+      network:
+      - ["forwarded_port", {guest: 80, host: 8080, guest: 443, host: 8443}]
+  - name: centos-6.4
+    driver_config:
+        network:
+        - ["forwarded_port", {guest: 80, host: 8081, guest: 443, host: 8444}]
+
+suites:
+  - name: default
+    run_list:
+      - recipe[magento::default]
+    attributes:
+      mysql:
+        server_debian_password: test
+        server_root_password: test
+        server_repl_password: test
+      magento:
+        db:
+          password: magento
