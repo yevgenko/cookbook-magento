@@ -58,6 +58,7 @@ define :magento_site do
       )
     end
     nginx_site "#{site}" do
+      template nil
       notifies :reload, resources(:service => "nginx")
     end
   end

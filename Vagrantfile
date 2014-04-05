@@ -9,12 +9,12 @@ Vagrant.configure("2") do |config|
   config.vm.hostname = "cookbook-magento-berkshelf"
 
   case ENV['VMBOX']
-  when 'centos63'
-    config.vm.box = "Berkshelf-CentOS-6.3-x86_64-minimal"
-    config.vm.box_url = "https://dl.dropbox.com/u/31081437/Berkshelf-CentOS-6.3-x86_64-minimal.box"
+  when 'centos65'
+    config.vm.box = "CentOS 6.5"
+    config.vm.box_url = "http://opscode-vm-bento.s3.amazonaws.com/vagrant/virtualbox/opscode_centos-6.5_chef-provisionerless.box"
   else
-    config.vm.box = "Ubuntu precise 64"
-    config.vm.box_url = "http://files.vagrantup.com/precise64.box"
+    config.vm.box = "Ubuntu 12.04"
+    config.vm.box_url = "http://opscode-vm-bento.s3.amazonaws.com/vagrant/virtualbox/opscode_ubuntu-12.04_chef-provisionerless.box"
   end
 
   # Assign this VM to a host-only network IP, allowing you to access it
@@ -70,7 +70,7 @@ Vagrant.configure("2") do |config|
   # An array of symbols representing groups of cookbook described in the Vagrantfile
   # to skip installing and copying to Vagrant's shelf.
   # config.berkshelf.except = []
-
+  config.omnibus.chef_version = :latest
   config.vm.provision :chef_solo do |chef|
     chef.json = {
       :mysql => {

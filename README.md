@@ -48,16 +48,17 @@ sandboxed environment, i.e. [VirtualBox][]
  * [Berkshelf][]: `bundle install`
  * [Vagrant][] 1.1.0 and greater
  * Berkshelf plugin for Vagrant: `vagrant plugin install vagrant-berkshelf`
+ * Omnibus plugin for Vagrant: `vagrant plugin install vagrant-omnibus`
 
 ### Bootstrap VirtualBox
 
-#### With Ubuntu precise 64
+#### With Ubuntu 12.04
 
     vagrant up
 
-#### With CentOS 6.3 x86_64-minimal
+#### With CentOS 6.5
 
-    VMBOX='centos63' vagrant up
+    VMBOX='centos65' vagrant up
 
 
 ## Contributing
