@@ -1,23 +1,8 @@
 define :magento_database do
 
   include_recipe "mysql::server"
-
-  # necessary for mysql gem installation
-  package "make" do
-    action :upgrade
-  end
-  
-  package "libmysql-ruby" do
-    action :install
-  end
-
-  package "libmysqlclient-dev" do
-    action :install
-  end
-
-  gem_package "mysql" do
-    action :install
-  end
+  include_recipe "mysql::client"
+  include_recipe "mysql-chef_gem"
 
   execute "mysql-install-mage-privileges" do
     command "/usr/bin/mysql -u root -p#{node[:mysql][:server_root_password]} < /etc/mysql/mage-grants.sql"

@@ -7,6 +7,7 @@ unless File.exist?("#{node[:magento][:dir]}/.installed")
   case node["platform_family"]
   when "rhel", "fedora"
     include_recipe "yum"
+    include_recipe "yum-epel"
   else
     include_recipe "apt"
   end
@@ -40,10 +41,7 @@ unless File.exist?("#{node[:magento][:dir]}/.installed")
 
   # Centos Polyfills
   if platform?('centos', 'redhat')
-    execute "Install libmcrypt" do
-      command "rpm -Uvh --nosignature --replacepkgs http://pkgs.repoforge.org/libmcrypt/libmcrypt-2.5.7-1.2.el6.rf.#{machine}.rpm"
-      action :run
-    end
+    package 'libmcrypt'
   end
 
   # Install required packages
