@@ -19,6 +19,10 @@ server {
   root <%= @path %>;
   autoindex off;
 
+  # Higher timeouts for when we need to reindex caches in the gui
+  send_timeout <%= node[:magento][:nginx][:send_timeout] %>;
+  proxy_read_timeout <%= node[:magento][:nginx][:proxy_read_timeout] %>;
+
   # protection (we have no .htaccess)
   location ~ (^/(app/|includes/|lib/|/pkginfo/|var/|report/config.xml)|/\.git/|/\.hg/|/\.svn/|/.hta.+) {
     deny all;
