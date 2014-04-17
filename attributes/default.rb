@@ -24,6 +24,8 @@ end
 
 # Web Server
 default[:magento][:webserver] = 'nginx'
+default[:magento][:nginx][:send_timeout] = 60
+default[:magento][:nginx][:proxy_read_timeout] = 60
 
 default['php-fpm']['pools'] = [
   {
