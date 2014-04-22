@@ -7,7 +7,7 @@ Collection of recipes to build app stack for the [Magento][] deployments with
 
 ### With Berkshelf
 
-    echo "cookbook 'magento', '~> 0.6'" >> Berksfile
+    echo "cookbook 'magento', '~> 0.7'" >> Berksfile
     berks install
     berks upload # if using with Chef Server
 
