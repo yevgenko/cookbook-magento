@@ -18,3 +18,4 @@ end
 end
 
 depends 'php-fpm', '>= 0.6.4'
+depends 'nginx', '~> 2.6'

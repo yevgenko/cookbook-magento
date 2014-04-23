@@ -1,6 +1,6 @@
 # coding: utf-8
 
-installed_file = "/root/.magento.db.installed"
+installed_file = '/root/.magento.db.installed'
 
 unless File.exist?(installed_file)
 
