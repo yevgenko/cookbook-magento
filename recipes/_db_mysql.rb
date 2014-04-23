@@ -1,9 +1,14 @@
 # coding: utf-8
-define :magento_database do
+
+installed_file = "/root/.magento.db.installed"
+
+unless File.exist?(installed_file)
 
   include_recipe 'mysql::server'
   include_recipe 'mysql::client'
   include_recipe 'mysql-chef_gem'
+
+  db_config = node[:magento][:db]
 
   execute 'mysql-install-mage-privileges' do
     command <<-EOH
@@ -50,4 +55,31 @@ define :magento_database do
     end
   end
 
+  # Import Sample Data
+  unless node[:magento][:sample_data_url].empty?
+    include_recipe 'mysql::client'
+
+    remote_file File.join(Chef::Config[:file_cache_path],
+                          'magento-sample-data.tar.gz') do
+      source node[:magento][:sample_data_url]
+      mode 0644
+    end
+
+    bash 'magento-sample-data' do
+      cwd "#{Chef::Config[:file_cache_path]}"
+      code <<-EOH
+        mkdir #{name}
+        cd #{name}
+        tar --strip-components 1 -xzf \
+        #{Chef::Config[:file_cache_path]}/magento-sample-data.tar.gz
+        mv media/* #{node[:magento][:dir]}/media/
+
+        mv magento_sample_data*.sql data.sql 2>/dev/null
+        /usr/bin/mysql -h #{db_config[:host]} -u #{db_config[:username]} \
+        -p#{db_config[:password]} #{db_config[:database]} < data.sql
+        cd ..
+        rm -rf #{name}
+      EOH
+    end
+  end
 end

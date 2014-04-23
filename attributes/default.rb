@@ -46,6 +46,10 @@ default['php-fpm']['pools'] = [
 # Credentials
 ::Chef::Node.send(:include, Opscode::OpenSSL::Password)
 
+default[:magento][:database] = 'mysql' # mysql or percona
+
+default[:magento][:db][:host] = 'localhost'
 default[:magento][:db][:database] = 'magento'
 default[:magento][:db][:username] = 'magentouser'
 set_unless[:magento][:db][:password] = secure_password
+default[:magento][:db][:acl] = 'localhost'
