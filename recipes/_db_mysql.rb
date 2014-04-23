@@ -8,11 +8,12 @@ unless File.exist?(installed_file)
   include_recipe 'mysql::client'
   include_recipe 'mysql-chef_gem'
 
+  root_password = node[:mysql][:server_root_password]
   db_config = node[:magento][:db]
 
   execute 'mysql-install-mage-privileges' do
     command <<-EOH
-    /usr/bin/mysql -u root -p#{node[:mysql][:server_root_password]} < \
+    /usr/bin/mysql -u root -p#{root_password} < \
     /etc/mysql/mage-grants.sql
     EOH
     action :nothing
@@ -31,14 +32,14 @@ unless File.exist?(installed_file)
 
   execute "create #{node[:magento][:db][:database]} database" do
     command <<-EOH
-    /usr/bin/mysqladmin -u root -p#{node[:mysql][:server_root_password]} \
+    /usr/bin/mysqladmin -u root -p#{root_password} \
     create #{node[:magento][:db][:database]}
     EOH
     not_if do
       require 'rubygems'
       Gem.clear_paths
       require 'mysql'
-      m = Mysql.new('localhost', 'root', node[:mysql][:server_root_password])
+      m = Mysql.new('localhost', 'root', root_password)
       m.list_dbs.include?(node[:magento][:db][:database])
     end
   end
