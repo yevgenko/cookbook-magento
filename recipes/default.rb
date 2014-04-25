@@ -56,14 +56,14 @@ unless File.exist?(File.join(node[:magento][:dir], '.installed'))
   end
 
   bash 'Tweak apc.ini file' do
-    cwd "#{php_conf[1]}" # module ini files
+    cwd php_conf[1] # module ini files
     code <<-EOH
     grep -q -e 'apc.stat=0' apc.ini || echo "apc.stat=0" >> apc.ini
     EOH
   end
 
   bash 'Tweak FPM php.ini file' do
-    cwd "#{php_conf[0]}" # php.ini location
+    cwd php_conf[0] # php.ini location
     code <<-EOH
     sed -i 's/memory_limit = .*/memory_limit = 128M/' php.ini
     sed -i 's/;realpath_cache_size = .*/realpath_cache_size = 32K/' php.ini
@@ -80,7 +80,7 @@ unless File.exist?(File.join(node[:magento][:dir], '.installed'))
     recursive true
   end
 
-  magento_site
+  include_recipe "magento::_web_#{node[:magento][:webserver]}"
 
   # Fetch magento release
   unless node[:magento][:url].empty?
@@ -115,7 +115,7 @@ unless File.exist?(File.join(node[:magento][:dir], '.installed'))
 
   # Generate local.xml file
   if enc_key
-    template File.join(node[:magento][:dir], 'app/etc/local.xml') do
+    template File.join(node[:magento][:dir], 'app', 'etc', 'local.xml') do
       source 'local.xml.erb'
       mode 0600
       owner node[:magento][:user]

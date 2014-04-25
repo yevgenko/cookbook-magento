@@ -3,6 +3,7 @@
 default[:magento][:url] = 'http://www.magentocommerce.com/downloads/assets/1.'\
                           '8.1.0/magento-1.8.1.0.tar.gz'
 default[:magento][:dir] = '/var/www/magento'
+default[:magento][:domain] = node['fqdn']
 # Magento CE's sample data can be found here:
 # 'http://www.magentocommerce.com/downloads/assets/1.6.1.0/magento-sample-dat'\
 # 'a-1.6.1.0.tar.gz'
@@ -43,10 +44,13 @@ default['php-fpm']['pools'] = [
   }
 ]
 
+# Web Server SSL Settings
+default[:magento][:cert_name] = "#{node[:magento][:domain]}.pem"
+
 # Credentials
 ::Chef::Node.send(:include, Opscode::OpenSSL::Password)
 
-default[:magento][:database] = 'mysql' # mysql or percona
+default[:magento][:database] = 'mysql'
 
 default[:magento][:db][:host] = 'localhost'
 default[:magento][:db][:database] = 'magento'
