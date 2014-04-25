@@ -31,7 +31,8 @@ end
     variables(
       path: node[:magento][:dir],
       ssl: (site == 'ssl') ? true : false,
-      ssl_cert: File.join(node[:nginx][:dir], 'ssl', node[:magento][:cert_name]),
+      ssl_cert: File.join(node[:nginx][:dir], 'ssl',
+                          node[:magento][:cert_name]),
       ssl_key: File.join(node[:nginx][:dir], 'ssl', node[:magento][:cert_name])
     )
   end

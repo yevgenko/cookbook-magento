@@ -11,13 +11,13 @@ include_recipe 'apache2'
 Magento.create_ssl_cert(File.join(node[:apache][:dir], 'ssl'),
                         node[:magento][:domain], node[:magento][:cert_name])
 
-%w{default ssl}.each do |site|
+%w(default ssl).each do |site|
   web_app "#{site}" do
     template 'apache2-site.conf.erb'
     docroot node[:magento][:dir]
     server_name node[:magento][:domain]
     server_aliases node.fqdn
-    ssl (site == "ssl")?true:false
+    ssl true if site == 'ssl'
     ssl_cert File.join(node[:apache][:dir], 'ssl', node[:magento][:cert_name])
     ssl_key File.join(node[:apache][:dir], 'ssl', node[:magento][:cert_name])
   end
