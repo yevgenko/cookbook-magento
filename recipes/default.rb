@@ -56,14 +56,14 @@ unless File.exist?(File.join(node[:magento][:dir], '.installed'))
   end
 
   bash 'Tweak apc.ini file' do
-    cwd "#{php_conf[1]}" # module ini files
+    cwd php_conf[1] # module ini files
     code <<-EOH
     grep -q -e 'apc.stat=0' apc.ini || echo "apc.stat=0" >> apc.ini
     EOH
   end
 
   bash 'Tweak FPM php.ini file' do
-    cwd "#{php_conf[0]}" # php.ini location
+    cwd php_conf[0] # php.ini location
     code <<-EOH
     sed -i 's/memory_limit = .*/memory_limit = 128M/' php.ini
     sed -i 's/;realpath_cache_size = .*/realpath_cache_size = 32K/' php.ini
@@ -80,7 +80,7 @@ unless File.exist?(File.join(node[:magento][:dir], '.installed'))
     recursive true
   end
 
-  magento_site
+  include_recipe "magento::_web_#{node[:magento][:webserver]}"
 
   # Fetch magento release
   unless node[:magento][:url].empty?
@@ -99,8 +99,8 @@ unless File.exist?(File.join(node[:magento][:dir], '.installed'))
 
   # Setup Database
   # if Chef::Config[:solo]
-  db_config = { host: 'localhost' }
-  db_user = node[:magento][:db]
+  db_config = node[:magento][:db]
+
   # else
     # FIXME: data bags search throwing 404 error: Net::HTTPServerException
     # db_config = search(:db_config, "id:master").first ||
@@ -109,45 +109,18 @@ unless File.exist?(File.join(node[:magento][:dir], '.installed'))
     # enc_key = search(:magento, "id:enckey").first
   # end
 
-  magento_database if db_config[:host] == 'localhost'
-
-  # Import Sample Data
-  unless node[:magento][:sample_data_url].empty?
-    include_recipe 'mysql::client'
-
-    remote_file File.join(Chef::Config[:file_cache_path],
-                          'magento-sample-data.tar.gz') do
-      source node[:magento][:sample_data_url]
-      mode 0644
-    end
-
-    bash 'magento-sample-data' do
-      cwd "#{Chef::Config[:file_cache_path]}"
-      code <<-EOH
-        mkdir #{name}
-        cd #{name}
-        tar --strip-components 1 -xzf \
-        #{Chef::Config[:file_cache_path]}/magento-sample-data.tar.gz
-        mv media/* #{node[:magento][:dir]}/media/
-
-        mv magento_sample_data*.sql data.sql 2>/dev/null
-        /usr/bin/mysql -h #{db_config[:host]} -u #{db_user[:username]} \
-        -p#{db_user[:password]} #{db_user[:database]} < data.sql
-        cd ..
-        rm -rf #{name}
-        EOH
-    end
+  if db_config[:host] == 'localhost'
+    include_recipe "magento::_db_#{node[:magento][:database]}"
   end
 
   # Generate local.xml file
   if enc_key
-    template File.join(node[:magento][:dir], 'app/etc/local.xml') do
+    template File.join(node[:magento][:dir], 'app', 'etc', 'local.xml') do
       source 'local.xml.erb'
       mode 0600
       owner node[:magento][:user]
       variables(
         db_config: db_config,
-        db_user: db_user,
         enc_key: enc_key,
         session: node[:magento][:session],
         inst_date: inst_date

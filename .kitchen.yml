@@ -27,3 +27,15 @@ suites:
       magento:
         db:
           password: magento
+  - name: apache
+    run_list:
+      - recipe[magento::default]
+    attributes:
+      mysql:
+        server_debian_password: test
+        server_root_password: test
+        server_repl_password: test
+      magento:
+        webserver: apache2
+        db:
+          password: magento
