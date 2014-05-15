@@ -1,11 +1,11 @@
 <%- if @params[:ssl] %>
-<VirtualHost *:443>
+<VirtualHost *:<%= node[:magento][:https_port] %>
 
   SSLEngine on
   SSLCertificateFile <%= @params[:ssl_cert] %>
   SSLCertificateKeyFile <%= @params[:ssl_key] %>
 <%- else %>
-<VirtualHost *:80>
+<VirtualHost *:<%= node[:magento][:http_port] %>>
 <%- end %>
 
   ServerName <%= node[:magento][:domain] %>

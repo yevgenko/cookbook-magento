@@ -25,6 +25,8 @@ end
 
 # Web Server
 default[:magento][:webserver] = 'nginx'
+default[:magento][:http_port] = 80
+default[:magento][:https_port] = 443
 default[:magento][:nginx][:send_timeout] = 60
 default[:magento][:nginx][:proxy_read_timeout] = 60
 
