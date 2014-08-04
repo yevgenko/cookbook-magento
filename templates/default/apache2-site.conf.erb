@@ -1,5 +1,5 @@
 <%- if @params[:ssl] %>
-<VirtualHost *:<%= node[:magento][:https_port] %>
+<VirtualHost *:<%= node[:magento][:https_port] %>>
 
   SSLEngine on
   SSLCertificateFile <%= @params[:ssl_cert] %>
