@@ -15,7 +15,7 @@ unless File.exist?(File.join(node[:magento][:dir], '.installed'))
 
   enc_key = nil # magento encryption key
   webserver = node[:magento][:webserver]
-  user = 'magento'
+  user = node[:magento][:user]
   group = node[webserver]['group']
   php_conf =  if platform?('centos', 'redhat')
                 ['/etc', '/etc/php.d']

@@ -11,6 +11,7 @@ default[:magento][:sample_data_url] = ''
 default[:magento][:run_type] = 'store'
 default[:magento][:run_codes] = []
 default[:magento][:session][:save] = 'db'
+default[:magento][:user] = 'magento'
 
 # Required packages
 case node['platform_family']
@@ -35,8 +36,8 @@ default['php-fpm']['pools'] = [
     name: 'magento',
     listen: '127.0.0.1:9001',
     allowed_clients: ['127.0.0.1'],
-    user: 'magento',
-    group: 'magento',
+    user: node[:magento][:user],
+    group: node[node[:magento][:webserver]][:group],
     process_manager: 'dynamic',
     max_children: 50,
     start_servers: 5,
