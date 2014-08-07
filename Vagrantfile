@@ -82,7 +82,7 @@ Vagrant.configure("2") do |config|
         :db => {
           :password => 'magepass'
         },
-        :sample_data_url => 'http://www.magentocommerce.com/downloads/assets/1.6.1.0/magento-sample-data-1.6.1.0.tar.gz'
+        :sample_data_url => 'http://www.magentocommerce.com/downloads/assets/1.9.0.0/magento-sample-data-1.9.0.0.tar.gz'
       }
     }
 
