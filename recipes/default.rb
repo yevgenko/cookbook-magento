@@ -17,11 +17,19 @@ unless File.exist?(File.join(node[:magento][:dir], '.installed'))
   webserver = node[:magento][:webserver]
   user = node[:magento][:user]
   group = node[webserver]['group']
-  php_conf =  if platform?('centos', 'redhat')
-                ['/etc', '/etc/php.d']
-              else
-                ['/etc/php5/fpm', '/etc/php5/conf.d']
-              end
+
+  if platform?('centos', 'redhat')
+    php_conf = ['/etc', '/etc/php.d']
+    apc_config = 'apc.ini'
+  else
+    if platform?('ubuntu') && node[:platform_version] == '14.04'
+      php_conf = ['/etc/php5/fpm', '/etc/php5/fpm/conf.d']
+      apc_config = '20-apcu.ini'
+    else
+      php_conf = ['/etc/php5/fpm', '/etc/php5/conf.d']
+      apc_config = 'apc.ini'
+    end
+  end
 
   user "#{user}" do
     comment 'magento guy'
@@ -58,7 +66,7 @@ unless File.exist?(File.join(node[:magento][:dir], '.installed'))
   bash 'Tweak apc.ini file' do
     cwd php_conf[1] # module ini files
     code <<-EOH
-    grep -q -e 'apc.stat=0' apc.ini || echo "apc.stat=0" >> apc.ini
+    grep -q -e 'apc.stat=0' #{apc_config} || echo "apc.stat=0" >> #{apc_config}
     EOH
   end
 
