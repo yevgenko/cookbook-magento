@@ -11,6 +11,12 @@ include_recipe 'apache2'
 Magento.create_ssl_cert(File.join(node[:apache][:dir], 'ssl'),
                         node[:magento][:domain], node[:magento][:cert_name])
 
+%w(default 000-default).each do |site|
+  apache_site "#{site}" do
+    enable false
+  end
+end
+
 %w(default ssl).each do |site|
   web_app "#{site}" do
     template 'apache2-site.conf.erb'
@@ -20,11 +26,5 @@ Magento.create_ssl_cert(File.join(node[:apache][:dir], 'ssl'),
     ssl true if site == 'ssl'
     ssl_cert File.join(node[:apache][:dir], 'ssl', node[:magento][:cert_name])
     ssl_key File.join(node[:apache][:dir], 'ssl', node[:magento][:cert_name])
-  end
-end
-
-%w(default 000-default).each do |site|
-  apache_site "#{site}" do
-    enable false
   end
 end
